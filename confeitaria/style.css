@@ -1,0 +1,11 @@
+#menu-opcoes {
+    display: none;
+  }
+
+  #menu-opcoes.mostrar {
+    display: block;
+  }
+
+  .titulo{
+    margin-top: 10px;
+  }
