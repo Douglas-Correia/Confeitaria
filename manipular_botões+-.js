@@ -20,11 +20,17 @@ let inputQuantity3 = document.getElementById("input-quantity3");
 let inputQuantity4 = document.getElementById("input-quantity4");
 let inputQuantity5 = document.getElementById("input-quantity5");
 
+// adicionando ao carrinho
+let cart = {};
+let cartCount = document.getElementById("cart-count");
 // Manipulando botões 1
 btnPlus.addEventListener('click', () => {
   let quantity = parseInt(inputQuantity.value);
   quantity++;
   inputQuantity.value = quantity;
+  
+  cartCount.innerHTML = quantity; // Atualizando o conteúdo do span
+  cartCount.setAttribute("value", quantity); // Atualizando o atributo value
 });
 
 btnMinus.addEventListener('click', () => {
@@ -32,6 +38,8 @@ btnMinus.addEventListener('click', () => {
   if (quantity > 0) {
     quantity--;
     inputQuantity.value = quantity;
+    cartCount.innerHTML = quantity;
+    cartCount.setAttribute("value", quantity);
   }
 });
 
@@ -94,26 +102,6 @@ btnMinus5.addEventListener('click', () => {
   }
 })
 
-
-// adicionando ao carrinho
-let cart = {};
-
-function addToCart(name, price, quantity) {
-  if (cart[name]) {
-    cart[name].quantity += quantity;
-  } else {
-    cart[name] = { price, quantity };
-  }
-}
-
-function removeFromCart(name, quantity) {
-  if (cart[name]) {
-    cart[name].quantity -= quantity;
-    if (cart[name].quantity <= 0) {
-      delete cart[name];
-    }
-  }
-}
 
 // Verificando se existe a classe hide, quando clicar no menu, remove a classe, quando clicar novamente, adiciona a classe
 let btn_nav = document.getElementById("btn-nav");

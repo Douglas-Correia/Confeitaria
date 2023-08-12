@@ -33,11 +33,11 @@
       <div class="navbar-text">
         <span class="badge bg-success text-white ms-1 update-cart-quantity" id="cart-count" value="0">0</span>
         <a href="carrinho.php" class="btn btn-primary ms-1" id="cart-button" action="carrinho.php">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
-            <path d="M0 0h1v1H0V0zm3 0h10v1H3V0zm11 2H2.133l-.8 4h12.534l-.8-4zM3.2 6L3.8 4h8.4l.6 3H3.2zm-1 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-          </svg>
-</a>
-      </div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
+                <path d="M0 0h1v1H0V0zm3 0h10v1H3V0zm11 2H2.133l-.8 4h12.534l-.8-4zM3.2 6L3.8 4h8.4l.6 3H3.2zm-1 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+        </svg>
+    </a>
+</div>
     </div>
   </nav>
 </header>
