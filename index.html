@@ -31,8 +31,9 @@
         </ul>
       </div>
       <div class="navbar-text">
+        
+        <a href="carrinho.html" class="btn btn-primary ms-1" id="btn-finalizar-compra">
         <span class="badge bg-success text-white ms-1 update-cart-quantity" id="cart-count" value="0">0</span>
-        <a href="carrinho.php" class="btn btn-primary ms-1" id="cart-button" action="carrinho.php">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
                 <path d="M0 0h1v1H0V0zm3 0h10v1H3V0zm11 2H2.133l-.8 4h12.534l-.8-4zM3.2 6L3.8 4h8.4l.6 3H3.2zm-1 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
         </svg>
@@ -52,9 +53,9 @@
           <div class="card">
             <img class="card-img-top" src="https://via.placeholder.com/300x200.png?text=Produto+1" alt="Imagem do produto 1">
             <div class="card-body">
-              <h3 class="card-title" id="produto1">Produto 1</h3>
-              <p class="card-text" id="desc-produto1">Descrição do Produto 1</p>
-              <h4 class="card-price" id="valor-produto1">R$ XX,XX</h4>
+              <h3 class="card-title" id="produto1">Bolo de chocolate</h3>
+              <p class="card-text" id="desc-produto1">Chocolate com nutella e morango</p>
+              <h4 class="card-price" id="valor-produto1">R$ 50,00</h4>
               <div class="text-center">
                 <div class="input-group mb-3">
                   <button id="btn-minus" class="btn btn-danger">-</button>
@@ -154,15 +155,14 @@
   </ul>
 
   <div class="d-flex justify-content-center align-items-center">
-  <a href="carrinho.php" class="btn btn-lg btn-outline-secondary btn-primary">Finalizar compra</a>
+  <a href="carrinho.html" class="btn btn-lg btn-outline-secondary btn-primary" id="">Finalizar compra</a>
 </div>
 </section>
   
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-  <script src="manipular_botões+-.js"></script>
-  <script src="adicionar_carrinho.js"></script>
+  <script type="module" src="manipular_botões+-.js"></script>
   
 </body>
 </html>

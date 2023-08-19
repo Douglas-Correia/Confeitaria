@@ -19,18 +19,27 @@ let inputQuantity2 = document.getElementById("input-quantity2");
 let inputQuantity3 = document.getElementById("input-quantity3");
 let inputQuantity4 = document.getElementById("input-quantity4");
 let inputQuantity5 = document.getElementById("input-quantity5");
+let totalCart = 0;
 
-// adicionando ao carrinho
-let cart = {};
-let cartCount = document.getElementById("cart-count");
-// Manipulando botões 1
+function updateCartCount(){
+  let cartCount = document.getElementById("cart-count");
+  cartCount.textContent = totalCart // Atualizando o conteúdo do span
+}
+
 btnPlus.addEventListener('click', () => {
   let quantity = parseInt(inputQuantity.value);
   quantity++;
   inputQuantity.value = quantity;
-  
-  cartCount.innerHTML = quantity; // Atualizando o conteúdo do span
-  cartCount.setAttribute("value", quantity); // Atualizando o atributo value
+
+  totalCart++; // Atualizando o atributo value
+  updateCartCount() // Chamando a função que atualiza o span
+
+  const productId = document.getElementById("produto1").textContent;
+  const descProduto = document.getElementById("desc-produto1").textContent;
+  const valorProduto = document.getElementById("valor-produto1").textContent;
+
+  // Redirecionando para a página do carrinho com os valores na query string
+  window.location.href = `carrinho.html?productId=${productId}&descProduto=${descProduto}&valorProduto=${valorProduto}`;
 });
 
 btnMinus.addEventListener('click', () => {
@@ -38,9 +47,10 @@ btnMinus.addEventListener('click', () => {
   if (quantity > 0) {
     quantity--;
     inputQuantity.value = quantity;
-    cartCount.innerHTML = quantity;
-    cartCount.setAttribute("value", quantity);
-  }
+
+    totalCart--; // Atualizando o atributo value
+    updateCartCount() // Chamando a função que atualiza o span
+    }
 });
 
 // Manipulando botões 2
@@ -48,6 +58,9 @@ btnPlus2.addEventListener('click', () => {
   let quantity2 = parseInt(inputQuantity2.value);
   quantity2++;
   inputQuantity2.value = quantity2;
+
+  totalCart++; // Atualizando o atributo value
+  updateCartCount() // Chamando a função que atualiza o span
 });
 
 btnMinus2.addEventListener('click', () => {
@@ -55,6 +68,9 @@ btnMinus2.addEventListener('click', () => {
   if (quantity2 > 0) {
     quantity2--;
     inputQuantity2.value = quantity2;
+
+    totalCart--; // Atualizando o atributo value
+    updateCartCount() // Chamando a função que atualiza o span
   }
 });
 // Manipulando botões 3
@@ -62,13 +78,19 @@ btnPlus3.addEventListener('click', () => {
   let quantity3 = parseInt(inputQuantity3.value);
   quantity3++;
   inputQuantity3.value = quantity3;
+
+  totalCart++; // Atualizando o atributo value
+  updateCartCount() // Chamando a função que atualiza o span
 })
 
 btnMinus3.addEventListener('click', () => {
   let quantity3 = parseInt(inputQuantity3.value);
   if(quantity3 > 0){
-  quantity3--;
-  inputQuantity3.value = quantity3;
+    quantity3--;
+    inputQuantity3.value = quantity3;
+
+    totalCart--; // Atualizando o atributo value
+    updateCartCount() // Chamando a função que atualiza o span
   }
 })
 
@@ -77,6 +99,9 @@ btnPlus4.addEventListener('click', () => {
   let quantity4 = parseInt(inputQuantity4.value);
   quantity4++;
   inputQuantity4.value = quantity4;
+
+  totalCart++; // Atualizando o atributo value
+  updateCartCount() // Chamando a função que atualiza o span
 })
 
 btnMinus4.addEventListener('click', () => {
@@ -84,6 +109,9 @@ btnMinus4.addEventListener('click', () => {
   if(quantity4 > 0){
     quantity4--;
     inputQuantity4.value = quantity4;
+
+    totalCart--; // Atualizando o atributo value
+    updateCartCount() // Chamando a função que atualiza o span
   }
 })
 
@@ -92,6 +120,9 @@ btnPlus5.addEventListener('click', () => {
   let quantity5 = parseInt(inputQuantity5.value);
   quantity5++;
   inputQuantity5.value = quantity5;
+
+  totalCart++; // Atualizando o atributo value
+  updateCartCount() // Chamando a função que atualiza o span
 })
 
 btnMinus5.addEventListener('click', () => {
@@ -99,9 +130,11 @@ btnMinus5.addEventListener('click', () => {
   if(quantity5 > 0){
     quantity5--;
     inputQuantity5.value = quantity5;
+
+    totalCart--; // Atualizando o atributo value
+    updateCartCount() // Chamando a função que atualiza o span
   }
 })
-
 
 // Verificando se existe a classe hide, quando clicar no menu, remove a classe, quando clicar novamente, adiciona a classe
 let btn_nav = document.getElementById("btn-nav");
@@ -114,15 +147,3 @@ btn_nav.addEventListener('click', () => {
     display_nav.classList.add("hide");
   }
 });
-
-// Elemento flutuante
-//let cartButton = document.getElementById("cart-button");
-//let cartPanel = document.getElementById("cart-panel");
-
-//cartButton.addEventListener('click', () => {
-  //if (cartPanel.classList.contains("hide")) {
-    //cartPanel.classList.remove("hide");
-  //} else {
-    //cartPanel.classList.add("hide");
-  //}
-//});
