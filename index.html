@@ -32,16 +32,112 @@
       </div>
       <div class="navbar-text">
         
-        <a href="carrinho.html" class="btn btn-primary ms-1" id="btn-finalizar-compra">
+        <p id="icone-carrinho" class="btn btn-primary ms-1">
         <span class="badge bg-success text-white ms-1 update-cart-quantity" id="cart-count" value="0">0</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3" viewBox="0 0 16 16">
                 <path d="M0 0h1v1H0V0zm3 0h10v1H3V0zm11 2H2.133l-.8 4h12.534l-.8-4zM3.2 6L3.8 4h8.4l.6 3H3.2zm-1 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm10 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
         </svg>
-    </a>
+      </p>
 </div>
     </div>
   </nav>
 </header>
+
+  <aside id="carrinho" class="carrinho-fechado">
+    <div class="container">
+      <main>
+        <button id="fechar-carrinho" class="fechar-carrinho">&times;</button>
+        <div class="py-5 text-center">
+          <img class="d-block mx-auto mb-4" src="" alt="" width="72" height="57">
+          <h2>Produtos do carrinho</h2>
+          <p class="lead">Seus produtos adicionados no carrinho estão logo abaixo.</p>
+        </div>
+    
+        <div class="row g-5">
+          <div class="col-md-5 col-lg-4 order-md-last">
+            <h4 class="d-flex justify-content-between align-items-center mb-3">
+              <span class="text-primary">Seu carrinho</span>
+              <span class="badge bg-primary rounded-pill" id="quantity-carrinho" value="0">1</span>
+            </h4>
+    
+            <ul id="cart-list" class="list-group mb-3"></ul>
+    
+          </div>
+          <div class="col-md-7 col-lg-8">
+            <h4 class="mb-3">Endereço de Cobrança</h4>
+            <form class="needs-validation" novalidate>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label for="firstName" class="form-label">Nome completo</label>
+                        <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+                        <div class="invalid-feedback">
+                            Valid first name is required.
+                        </div>
+                    </div>
+        
+                    <div class="col-12">
+                        <label for="email" class="form-label">Email <span class="text-muted">(Opcional)</span></label>
+                        <input type="email" class="form-control" id="email" placeholder="you@example.com">
+                        <div class="invalid-feedback">
+                            Please enter a valid email address for shipping updates.
+                        </div>
+                    </div>
+        
+                    <div class="col-12">
+                        <label for="address" class="form-label">Endereço</label>
+                        <input type="text" class="form-control" id="address" placeholder="1234 Main St" required>
+                        <div class="invalid-feedback">
+                            Please enter your shipping address.
+                        </div>
+                    </div>
+        
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="same-address">
+                        <label class="form-check-label" for="same-address">O endereço de entrega é o mesmo endereço de cobrança</label>
+                    </div>
+        
+                    <hr class="my-4">
+        
+                    <h4 class="mb-3">Pagamento</h4>
+        
+                    <div class="my-3">
+                        <div class="form-check">
+                            <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked required>
+                            <label class="form-check-label" for="credit">Credito cartão</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required>
+                            <label class="form-check-label" for="debit">Debito cartão</label>
+                        </div>
+                        <div class="form-check">
+                            <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required>
+                            <label class="form-check-label" for="paypal">Dinheiro</label>
+                        </div>
+                    </div>
+        
+                    <!-- Botão para enviar via WhatsApp -->
+                    <button type="button" id="whatsapp-button" class="btn btn-primary">Enviar via WhatsApp</button>
+                </div>
+            </form>
+        </div>
+    
+              <hr class="my-4">
+            </form>
+          </div>
+        </div>
+        <a href="index.html">Retornar para compras</a>
+      </main>
+    
+      <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">&copy; 2022–2023 Bolos delicias</p>
+        <ul class="list-inline">
+          <li class="list-inline-item"><a href="#">Privacy</a></li>
+          <li class="list-inline-item"><a href="#">Terms</a></li>
+          <li class="list-inline-item"><a href="#">Support</a></li>
+        </ul>
+      </footer>
+    </div>
+  </aside>
 
 <section class="py-5">
   <div class="container">
@@ -58,7 +154,7 @@
               <h4 class="card-price" id="valor-produto1">R$ 50,00</h4>
               <div class="text-center">
                 <div class="input-group mb-3">
-                  <button id="btn-minus" class="btn btn-danger">-</button>
+                  <button id="btn-minus" class="btn btn-danger btn-minus" data-product-id="produto1">-</button>
 
                   <input id="input-quantity" type="text" class="form-control text-center" value="0" readonly>
 
@@ -79,7 +175,7 @@
               <h4 class="card-price" id="valor-produto2">R$ XX,XX</h4>
               <div class="text-center">
                 <div class="input-group mb-3">
-                <button id="btn-minus2" class="btn btn-danger">-</button>
+                <button id="btn-minus2" class="btn btn-danger btn-minus" data-product-id="btn-produto2">-</button>
 
                   <input id="input-quantity2" type="text" class="form-control text-center" value="0" readonly>
 
@@ -100,7 +196,7 @@
               <h4 class="card-price" id="valor-produto3">R$ XX,XX</h4>
               <div class="text-center">
                 <div class="input-group mb-3">
-                <button id="btn-minus3" class="btn btn-danger">-</button>
+                <button id="btn-minus3" class="btn btn-danger btn-minus" data-product-id="btn-produto3">-</button>
 
                 <input id="input-quantity3" type="text" class="form-control text-center" value="0" readonly>
 
@@ -121,7 +217,7 @@
               <h4 class="card-price" id="valor-produto">R$ XX,XX</h4>
               <div class="text-center">
                 <div class="input-group mb-3">
-                <button id="btn-minus4" class="btn btn-danger">-</button>
+                <button id="btn-minus4" class="btn btn-danger btn-minus" data-product-id="btn-produto4">-</button>
 
                 <input id="input-quantity4" type="text" class="form-control text-center" value="0" readonly>
 
@@ -142,7 +238,7 @@
               <h4 class="card-price" id="valor-produto5">R$ XX,XX</h4>
               <div class="text-center">
                 <div class="input-group mb-3">
-                <button id="btn-minus5" class="btn btn-danger">-</button>
+                <button id="btn-minus5" class="btn btn-danger btn-minus" data-product-id="btn-produto5">-</button>
 
                 <input id="input-quantity5" type="text" class="form-control text-center" value="0" readonly>
 
@@ -163,6 +259,41 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
   <script type="module" src="manipular_botões+-.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const carrinho = document.getElementById("carrinho");
+      const btnfecharCarrinho = document.getElementById("fechar-carrinho");
+  
+      // Função para abrir o carrinho
+      function abrirCarrinho() {
+        carrinho.classList.add("carrinho-aberto");
+        // Desabilitar o scroll na página principal
+        document.body.style.overflow = "hidden";
+      }
+  
+      // Função para fechar o carrinho
+      function fecharCarrinho() {
+        carrinho.classList.remove("carrinho-aberto");
+        // Habilitar o scroll na página principal
+        document.body.style.overflow = "auto";
+      }
+  
+      // Adicione um evento de clique ao ícone do carrinho para abrir/fechar o carrinho
+      document.getElementById("icone-carrinho").addEventListener("click", () => {
+        if (carrinho.classList.contains("carrinho-aberto")) {
+          fecharCarrinho();
+        } else {
+          abrirCarrinho();
+        }
+      });
+  
+      // Adicione um evento de clique ao botão de fechar o carrinho
+      btnfecharCarrinho.addEventListener("click", () => {
+        fecharCarrinho();
+      });
+    });
+  </script>
   
 </body>
 </html>
