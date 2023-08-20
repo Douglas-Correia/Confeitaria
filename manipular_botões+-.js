@@ -21,11 +21,13 @@ let inputQuantity4 = document.getElementById("input-quantity4");
 let inputQuantity5 = document.getElementById("input-quantity5");
 let totalCart = 0;
 
+// FUNÇÃO PARA ALTERAR A QUANTIDADE DO CARRINHO 
 function updateCartCount(){
   let cartCount = document.getElementById("cart-count");
   cartCount.textContent = totalCart // Atualizando o conteúdo do span
 }
 
+// FUNÇÃO PARA ADICIONAR PRODUTOS AO CARRINHO
 btnPlus.addEventListener('click', () => {
   let quantity = parseInt(inputQuantity.value);
   quantity++;
@@ -38,19 +40,28 @@ btnPlus.addEventListener('click', () => {
   const descProduto = document.getElementById("desc-produto1").textContent;
   const valorProduto = document.getElementById("valor-produto1").textContent;
 
-  // Redirecionando para a página do carrinho com os valores na query string
-  window.location.href = `carrinho.html?productId=${productId}&descProduto=${descProduto}&valorProduto=${valorProduto}`;
+  addItemToCart(productId, descProduto, valorProduto);
 });
 
-btnMinus.addEventListener('click', () => {
-  let quantity = parseInt(inputQuantity.value);
-  if (quantity > 0) {
-    quantity--;
-    inputQuantity.value = quantity;
+// Selecione todos os botões "Menos" com a classe "btn-minus"
+const btnMinusArray = document.querySelectorAll(".btn-minus");
 
-    totalCart--; // Atualizando o atributo value
-    updateCartCount() // Chamando a função que atualiza o span
+// Adicione um ouvinte de evento a cada botão "Menos"
+btnMinusArray.forEach(btnMinus => {
+  btnMinus.addEventListener('click', () => {
+    let quantity = parseInt(inputQuantity.value);
+    if (quantity > 0) {
+      quantity--;
+      inputQuantity.value = quantity;
+
+      totalCart--; // Atualize o atributo value
+      updateCartCount(); // Chame a função que atualiza o span
+
+      // Obtenha o productId do atributo data-product-id
+      const productId = btnMinus.getAttribute("data-product-id");
+      removeItemFromCart(productId);
     }
+  });
 });
 
 // Manipulando botões 2
@@ -61,6 +72,12 @@ btnPlus2.addEventListener('click', () => {
 
   totalCart++; // Atualizando o atributo value
   updateCartCount() // Chamando a função que atualiza o span
+
+  const productId = document.getElementById("produto2").textContent;
+  const descProduto = document.getElementById("desc-produto2").textContent;
+  const valorProduto = document.getElementById("valor-produto2").textContent;
+
+  addItemToCart(productId, descProduto, valorProduto);
 });
 
 btnMinus2.addEventListener('click', () => {
@@ -146,4 +163,64 @@ btn_nav.addEventListener('click', () => {
   } else {
     display_nav.classList.add("hide");
   }
+});
+
+function removeItemFromCart(productId) {
+  // Crie o ID exclusivo do elemento do carrinho
+  const cartItemId = "cart-item-" + productId;
+
+  // Selecione o elemento do carrinho com base no cartItemId
+  const cartItem = document.getElementById(cartItemId);
+
+  if (cartItem) {
+    // Remova o elemento do carrinho
+    cartItem.remove();
+
+    // Atualize o carrinho na interface do usuário
+    updateCartCount();
+  }
+}
+
+// Função para adicionar um item à lista do carrinho
+function addItemToCart(nome, descricao, valor) {
+  const cartList = document.getElementById("cart-list");
+
+  const listItem = document.createElement("li");
+  listItem.className = "list-group-item d-flex justify-content-between lh-sm";
+
+  const itemDiv = document.createElement("div");
+  const nomeElement = document.createElement("h6");
+  nomeElement.className = "my-0";
+  nomeElement.textContent = nome;
+
+  const descricaoElement = document.createElement("small");
+  descricaoElement.className = "text-muted";
+  descricaoElement.textContent = descricao;
+  itemDiv.appendChild(nomeElement);
+  itemDiv.appendChild(descricaoElement);
+
+  const valorElement = document.createElement("span");
+  valorElement.className = "text-muted";
+  valorElement.textContent = valor;
+  valorElement.id = "valor-" + nome.toLowerCase().replace(" ", "-");
+
+  const hr = document.createElement("hr");
+
+  listItem.appendChild(itemDiv);
+  listItem.appendChild(valorElement);
+  cartList.appendChild(listItem);
+}
+
+// FUNÇÃO PARA MANIPULAÇÃO DOS PRODUTOS SELECIONADOS E CHAMADA DO WHATSAPP
+const whatsappButton = document.getElementById("whatsapp-button");
+
+whatsappButton.addEventListener("click", function () {
+  const firstName = document.getElementById("firstName").value;
+  const address = document.getElementById("address").value;
+  
+  const whatsappMessage = `Olá, meu nome é ${firstName}, Eu gostaria de pedir um ${productId},  meu endereço é ${address}.`;
+  
+  const whatsappLink = `https://api.whatsapp.com/send?phone=67999397401&text=${whatsappMessage}`;
+  
+  window.location.href = whatsappLink;
 });
