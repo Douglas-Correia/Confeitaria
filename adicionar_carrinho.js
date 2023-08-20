@@ -1,3 +1,15 @@
+// Verificando se existe a classe hide, quando clicar no menu, remove a classe, quando clicar novamente, adiciona a classe
+let btn_nav = document.getElementById("btn-nav");
+let display_nav = document.getElementById("navbarNav");
+
+btn_nav.addEventListener('click', () => {
+  if (display_nav.classList.contains("hide")) {
+    display_nav.classList.remove("hide");
+  } else {
+    display_nav.classList.add("hide");
+  }
+});
+
 // essa sessão eu pego os ids dos button e inputs
 let btnPlus = document.getElementById("btn-plus");
 let btnMinus = document.getElementById("btn-minus");
@@ -35,7 +47,10 @@ function adicionarProduto(id) {
   const descProduto = document.getElementById(`desc-produto-${id}`);
   const valorProduto = document.getElementById(`valor-produto-${id}`);
 
-  addItemToCart(produtoElement.textContent, descProduto.textContent, valorProduto.textContent);
+  // Crie um ID exclusivo para o produto no carrinho
+  const productId = `produto-${id}`;
+
+  addItemToCart(produtoElement.textContent, descProduto.textContent, valorProduto.textContent, productId);
 }
 
 // Adicione ouvintes de evento a cada botão de adicionar
@@ -52,64 +67,24 @@ for (let i = 1; i <= 5; i++) {
   });
 }
 
-// FUNÇÃO PARA REMOVER PRODUTOS DO CARRINHO
-function removerProduto(id) {
-  let inputQuantity = document.getElementById(`input-quantity-${id}`);
-  let quantidade = parseInt(inputQuantity.value);
-  if (quantidade > 0) {
-    quantidade--;
-    inputQuantity.value = quantidade;
-
-    totalCart--; // Atualizando o atributo value
-    updateCartCount(); // Chamando a função que atualiza o span
-
-    // Remova o item do carrinho se a quantidade for zero
-    if (quantidade === 0) {
-      removeItemFromCart(`produto${id}`);
-    }
-  }
-}
-
-// Função para atualizar a contagem do carrinho
-function updateCartCount() {
-  document.getElementById("cart-count").textContent = totalCart;
-}
-
-// Verificando se existe a classe hide, quando clicar no menu, remove a classe, quando clicar novamente, adiciona a classe
-let btn_nav = document.getElementById("btn-nav");
-let display_nav = document.getElementById("navbarNav");
-
-btn_nav.addEventListener('click', () => {
-  if (display_nav.classList.contains("hide")) {
-    display_nav.classList.remove("hide");
-  } else {
-    display_nav.classList.add("hide");
-  }
-});
-
+// Função para remover um item do carrinho usando o ID do produto
 function removeItemFromCart(productId) {
-  // Selecione todos os elementos do carrinho com a classe "cart-item"
-  const cartItems = document.querySelectorAll(".cart-item");
+  const cartItem = document.querySelector(`.cart-item[data-product-id="${productId}"]`);
 
-  // Itere sobre os elementos do carrinho
-  cartItems.forEach(cartItem => {
-    // Verifique se o elemento possui o atributo data-product-id correspondente
-    if (cartItem.getAttribute("data-product-id") === productId) {
-      // Remova o elemento do carrinho
-      cartItem.remove();
-    }
-  });
-
-  // Atualize o carrinho na interface do usuário
-  updateCartCount();
+  if (cartItem) {
+    cartItem.remove();
+    totalCart--; // Atualizando o totalCart
+    updateCartCount();
+  }
 }
 
 // Função para adicionar um item à lista do carrinho
-function addItemToCart(nome, descricao, valor) {
+function addItemToCart(nome, descricao, valor, productId) {
   const cartList = document.getElementById("cart-list");
 
   const listItem = document.createElement("li");
-  listItem.className = "list-group-item d-flex justify-content-between lh-sm";
+  listItem.className = "list-group-item d-flex justify-content-between lh-sm cart-item";
+  listItem.setAttribute("data-product-id", productId);
 
   const itemDiv = document.createElement("div");
   const nomeElement = document.createElement("h6");
@@ -125,14 +100,22 @@ function addItemToCart(nome, descricao, valor) {
   const valorElement = document.createElement("span");
   valorElement.className = "text-muted";
   valorElement.textContent = valor;
-  valorElement.id = "valor-" + nome.toLowerCase().replace(" ", "-");
-
-  const hr = document.createElement("hr");
+  valorElement.id = `valor-${productId}`;
 
   listItem.appendChild(itemDiv);
   listItem.appendChild(valorElement);
   cartList.appendChild(listItem);
 }
+
+// Função para atualizar a contagem do carrinho
+function updateCartCount() {
+  document.getElementById("cart-count").textContent = totalCart;
+}
+
+// Evento para fechar o carrinho
+document.getElementById("fechar-carrinho").addEventListener("click", () => {
+  // Feche o carrinho aqui (adicione o código necessário)
+});
 
 // FUNÇÃO PARA MANIPULAÇÃO DOS PRODUTOS SELECIONADOS E CHAMADA DO WHATSAPP
 const whatsappButton = document.getElementById("whatsapp-button");
