@@ -60,11 +60,39 @@ for (let i = 1; i <= 5; i++) {
   });
 }
 
-// Adicione ouvintes de evento a cada botão de remover
-for (let i = 1; i <= 5; i++) {
-  document.getElementById(`btn-minus-${i}`).addEventListener("click", () => {
-    removerProduto(i);
-  });
+// Adicione um ouvinte de evento ao elemento pai (cart-container)
+const cartContainer = document.getElementById("cart-container");
+
+cartContainer.addEventListener("click", (event) => {
+  // Verifique se o elemento clicado é um botão de remover (classe btn-minus)
+  if (event.target.classList.contains("btn-minus")) {
+    // Obtenha o ID do botão clicado
+    const buttonId = event.target.id; // Isso deve ser algo como "btn-minus-1", "btn-minus-2", etc.
+    
+    // Extraia o número do ID para obter o índice do produto
+    const productId = parseInt(buttonId.split("-")[2]);
+
+    // Chame a função para remover o produto com o ID correto
+    removerProduto(productId);
+  }
+});
+
+// Função para remover produtos do carrinho
+function removerProduto(id) {
+  let inputQuantity = document.getElementById(`input-quantity-${id}`);
+  let quantidade = parseInt(inputQuantity.value);
+  if (quantidade > 0) {
+    quantidade--;
+    inputQuantity.value = quantidade;
+
+    totalCart--; // Atualizando o atributo value
+    updateCartCount(); // Chamando a função que atualiza o span
+
+    // Remova o item do carrinho se a quantidade for zero
+    if (quantidade === 0) {
+      removeItemFromCart(`produto-${id}`);
+    }
+  }
 }
 
 // Função para remover um item do carrinho usando o ID do produto
