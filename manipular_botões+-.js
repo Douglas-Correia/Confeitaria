@@ -31,7 +31,10 @@ let inputQuantity2 = document.getElementById("input-quantity2");
 let inputQuantity3 = document.getElementById("input-quantity3");
 let inputQuantity4 = document.getElementById("input-quantity4");
 let inputQuantity5 = document.getElementById("input-quantity5");
+
 let totalCart = 0;
+// Variável global para armazenar os produtos no carrinho
+let carrinhoProdutos = [];
 
 // FUNÇÃO PARA ADICIONAR PRODUTOS AO CARRINHO
 function adicionarProduto(id) {
@@ -133,7 +136,12 @@ function addItemToCart(nome, descricao, valor, productId) {
   listItem.appendChild(valorElement);
   cartList.appendChild(listItem);
 
-  return nomeElement, descricaoElement, valorElement;
+  // Adicionar informações do produto ao carrinhoProdutos
+  carrinhoProdutos[productId] = {
+    nome: nome,
+    descricao: descricao,
+    valor: valor
+  };
 }
 
 // Função para atualizar a contagem do carrinho
@@ -149,12 +157,17 @@ whatsappButton.addEventListener("click", function () {
   const firstName = document.getElementById("firstName").value;
   const address = document.getElementById("address").value;
 
-  // Capturar o produto escolhido pelo cliente 
-  const selectedProduct = document.querySelectorAll("cart-list");
+  // Obtenha os produtos selecionados com base em carrinhoProdutos
+  const selectedProducts = Object.keys(carrinhoProdutos).map(productId => {
+    const item = carrinhoProdutos[productId];
+    return `${item.nome} (${item.descricao}) por ${item.valor}`;
+  });
 
-  const whatsappMessage = `Olá, meu nome é ${firstName}, Eu gostaria de pedir um ${selectedProduct}, meu endereço é ${address}.`;
+  const selectedProductsString = selectedProducts.join(", ");
 
-  const whatsappLink = `https://api.whatsapp.com/send?phone=67999397401&text=${whatsappMessage}`;
+  const whatsappMessage = `Olá, meu nome é ${firstName}, Eu gostaria de pedir ${selectedProductsString}, meu endereço é ${address}.`;
+
+  const whatsappLink = `https://api.whatsapp.com/send?phone=67999397401&text=${encodeURIComponent(whatsappMessage)}`;
 
   window.location.href = whatsappLink;
 });
