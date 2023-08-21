@@ -1,3 +1,15 @@
+// Verificando se existe a classe hide, quando clicar no menu, remove a classe, quando clicar novamente, adiciona a classe
+let btn_nav = document.getElementById("btn-nav");
+let display_nav = document.getElementById("navbarNav");
+
+btn_nav.addEventListener('click', () => {
+  if (display_nav.classList.contains("hide")) {
+    display_nav.classList.remove("hide");
+  } else {
+    display_nav.classList.add("hide");
+  }
+});
+
 // essa sessão eu pego os ids dos button e inputs
 let btnPlus = document.getElementById("btn-plus");
 let btnMinus = document.getElementById("btn-minus");
@@ -21,172 +33,85 @@ let inputQuantity4 = document.getElementById("input-quantity4");
 let inputQuantity5 = document.getElementById("input-quantity5");
 let totalCart = 0;
 
-// FUNÇÃO PARA ALTERAR A QUANTIDADE DO CARRINHO 
-function updateCartCount(){
-  let cartCount = document.getElementById("cart-count");
-  cartCount.textContent = totalCart // Atualizando o conteúdo do span
+// FUNÇÃO PARA ADICIONAR PRODUTOS AO CARRINHO
+function adicionarProduto(id) {
+  let inputQuantity = document.getElementById(`input-quantity-${id}`);
+  let quantidade = parseInt(inputQuantity.value);
+  quantidade++;
+  inputQuantity.value = quantidade;
+
+  totalCart++; // Atualizando o atributo value
+  updateCartCount(); // Chamando a função que atualiza o span
+
+  const produtoElement = document.getElementById(`produto-${id}`);
+  const descProduto = document.getElementById(`desc-produto-${id}`);
+  const valorProduto = document.getElementById(`valor-produto-${id}`);
+
+  // Crie um ID exclusivo para o produto no carrinho
+  const productId = `produto-${id}`;
+
+  addItemToCart(produtoElement.textContent, descProduto.textContent, valorProduto.textContent, productId);
 }
 
-// FUNÇÃO PARA ADICIONAR PRODUTOS AO CARRINHO
-btnPlus.addEventListener('click', () => {
-  let quantity = parseInt(inputQuantity.value);
-  quantity++;
-  inputQuantity.value = quantity;
-
-  totalCart++; // Atualizando o atributo value
-  updateCartCount() // Chamando a função que atualiza o span
-
-  const productId = document.getElementById("produto1").textContent;
-  const descProduto = document.getElementById("desc-produto1").textContent;
-  const valorProduto = document.getElementById("valor-produto1").textContent;
-
-  addItemToCart(productId, descProduto, valorProduto);
-});
-
-// Selecione todos os botões "Menos" com a classe "btn-minus"
-const btnMinusArray = document.querySelectorAll(".btn-minus");
-
-// Adicione um ouvinte de evento a cada botão "Menos"
-btnMinusArray.forEach(btnMinus => {
-  btnMinus.addEventListener('click', () => {
-    let quantity = parseInt(inputQuantity.value);
-    if (quantity > 0) {
-      quantity--;
-      inputQuantity.value = quantity;
-
-      totalCart--; // Atualize o atributo value
-      updateCartCount(); // Chame a função que atualiza o span
-
-      // Obtenha o productId do atributo data-product-id
-      const productId = btnMinus.getAttribute("data-product-id");
-      removeItemFromCart(productId);
-    }
+// Adicione ouvintes de evento a cada botão de adicionar
+for (let i = 1; i <= 5; i++) {
+  document.getElementById(`btn-plus-${i}`).addEventListener("click", () => {
+    adicionarProduto(i);
   });
-});
+}
 
-// Manipulando botões 2
-btnPlus2.addEventListener('click', () => {
-  let quantity2 = parseInt(inputQuantity2.value);
-  quantity2++;
-  inputQuantity2.value = quantity2;
+// Adicione um ouvinte de evento ao elemento pai (cart-container)
+const cartContainer = document.getElementById("cart-container");
 
-  totalCart++; // Atualizando o atributo value
-  updateCartCount() // Chamando a função que atualiza o span
+cartContainer.addEventListener("click", (event) => {
+  // Verifique se o elemento clicado é um botão de remover (classe btn-minus)
+  if (event.target.classList.contains("btn-minus")) {
+    // Obtenha o ID do botão clicado
+    const buttonId = event.target.id; // Isso deve ser algo como "btn-minus-1", "btn-minus-2", etc.
+    
+    // Extraia o número do ID para obter o índice do produto
+    const productId = parseInt(buttonId.split("-")[2]);
 
-  const productId = document.getElementById("produto2").textContent;
-  const descProduto = document.getElementById("desc-produto2").textContent;
-  const valorProduto = document.getElementById("valor-produto2").textContent;
-
-  addItemToCart(productId, descProduto, valorProduto);
-});
-
-btnMinus2.addEventListener('click', () => {
-  let quantity2 = parseInt(inputQuantity2.value);
-  if (quantity2 > 0) {
-    quantity2--;
-    inputQuantity2.value = quantity2;
-
-    totalCart--; // Atualizando o atributo value
-    updateCartCount() // Chamando a função que atualiza o span
-  }
-});
-// Manipulando botões 3
-btnPlus3.addEventListener('click', () => {
-  let quantity3 = parseInt(inputQuantity3.value);
-  quantity3++;
-  inputQuantity3.value = quantity3;
-
-  totalCart++; // Atualizando o atributo value
-  updateCartCount() // Chamando a função que atualiza o span
-})
-
-btnMinus3.addEventListener('click', () => {
-  let quantity3 = parseInt(inputQuantity3.value);
-  if(quantity3 > 0){
-    quantity3--;
-    inputQuantity3.value = quantity3;
-
-    totalCart--; // Atualizando o atributo value
-    updateCartCount() // Chamando a função que atualiza o span
-  }
-})
-
-// Manipulando botões 4
-btnPlus4.addEventListener('click', () => {
-  let quantity4 = parseInt(inputQuantity4.value);
-  quantity4++;
-  inputQuantity4.value = quantity4;
-
-  totalCart++; // Atualizando o atributo value
-  updateCartCount() // Chamando a função que atualiza o span
-})
-
-btnMinus4.addEventListener('click', () => {
-  let quantity4 = parseInt(inputQuantity4.value);
-  if(quantity4 > 0){
-    quantity4--;
-    inputQuantity4.value = quantity4;
-
-    totalCart--; // Atualizando o atributo value
-    updateCartCount() // Chamando a função que atualiza o span
-  }
-})
-
-//Manipulando botões 5
-btnPlus5.addEventListener('click', () => {
-  let quantity5 = parseInt(inputQuantity5.value);
-  quantity5++;
-  inputQuantity5.value = quantity5;
-
-  totalCart++; // Atualizando o atributo value
-  updateCartCount() // Chamando a função que atualiza o span
-})
-
-btnMinus5.addEventListener('click', () => {
-  let quantity5 = parseInt(inputQuantity5.value);
-  if(quantity5 > 0){
-    quantity5--;
-    inputQuantity5.value = quantity5;
-
-    totalCart--; // Atualizando o atributo value
-    updateCartCount() // Chamando a função que atualiza o span
-  }
-})
-
-// Verificando se existe a classe hide, quando clicar no menu, remove a classe, quando clicar novamente, adiciona a classe
-let btn_nav = document.getElementById("btn-nav");
-let display_nav = document.getElementById("navbarNav");
-
-btn_nav.addEventListener('click', () => {
-  if (display_nav.classList.contains("hide")) {
-    display_nav.classList.remove("hide");
-  } else {
-    display_nav.classList.add("hide");
+    // Chame a função para remover o produto com o ID correto
+    removerProduto(productId);
   }
 });
 
+// Função para remover produtos do carrinho
+function removerProduto(id) {
+  let inputQuantity = document.getElementById(`input-quantity-${id}`);
+  let quantidade = parseInt(inputQuantity.value);
+  if (quantidade > 0) {
+    quantidade--;
+    inputQuantity.value = quantidade;
+
+    totalCart--; // Atualizando o atributo value
+    updateCartCount(); // Chamando a função que atualiza o span
+
+    // Remova o item do carrinho se a quantidade for zero
+    if (quantidade === 0) {
+      removeItemFromCart(`produto-${id}`);
+    }
+  }
+}
+
+// Função para remover um item do carrinho usando o ID do produto
 function removeItemFromCart(productId) {
-  // Crie o ID exclusivo do elemento do carrinho
-  const cartItemId = "cart-item-" + productId;
-
-  // Selecione o elemento do carrinho com base no cartItemId
-  const cartItem = document.getElementById(cartItemId);
+  const cartItem = document.querySelector(`.cart-item[data-product-id="${productId}"]`);
 
   if (cartItem) {
-    // Remova o elemento do carrinho
     cartItem.remove();
-
-    // Atualize o carrinho na interface do usuário
-    updateCartCount();
+    updateCartCount(); // Atualiza o totalCart
   }
 }
 
 // Função para adicionar um item à lista do carrinho
-function addItemToCart(nome, descricao, valor) {
+function addItemToCart(nome, descricao, valor, productId) {
   const cartList = document.getElementById("cart-list");
 
   const listItem = document.createElement("li");
-  listItem.className = "list-group-item d-flex justify-content-between lh-sm";
+  listItem.className = "list-group-item d-flex justify-content-between lh-sm cart-item";
+  listItem.setAttribute("data-product-id", productId);
 
   const itemDiv = document.createElement("div");
   const nomeElement = document.createElement("h6");
@@ -202,13 +127,19 @@ function addItemToCart(nome, descricao, valor) {
   const valorElement = document.createElement("span");
   valorElement.className = "text-muted";
   valorElement.textContent = valor;
-  valorElement.id = "valor-" + nome.toLowerCase().replace(" ", "-");
-
-  const hr = document.createElement("hr");
+  valorElement.id = `valor-${productId}`;
 
   listItem.appendChild(itemDiv);
   listItem.appendChild(valorElement);
   cartList.appendChild(listItem);
+
+  return nomeElement, descricaoElement, valorElement;
+}
+
+// Função para atualizar a contagem do carrinho
+function updateCartCount() {
+  document.getElementById("cart-count").textContent = totalCart;
+  document.getElementById("quantity-carrinho").textContent = totalCart;
 }
 
 // FUNÇÃO PARA MANIPULAÇÃO DOS PRODUTOS SELECIONADOS E CHAMADA DO WHATSAPP
@@ -217,10 +148,13 @@ const whatsappButton = document.getElementById("whatsapp-button");
 whatsappButton.addEventListener("click", function () {
   const firstName = document.getElementById("firstName").value;
   const address = document.getElementById("address").value;
-  
-  const whatsappMessage = `Olá, meu nome é ${firstName}, Eu gostaria de pedir um ${productId},  meu endereço é ${address}.`;
-  
+
+  // Capturar o produto escolhido pelo cliente 
+  const selectedProduct = document.querySelectorAll("cart-list");
+
+  const whatsappMessage = `Olá, meu nome é ${firstName}, Eu gostaria de pedir um ${selectedProduct}, meu endereço é ${address}.`;
+
   const whatsappLink = `https://api.whatsapp.com/send?phone=67999397401&text=${whatsappMessage}`;
-  
+
   window.location.href = whatsappLink;
 });
