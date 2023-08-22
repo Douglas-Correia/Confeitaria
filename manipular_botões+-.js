@@ -36,29 +36,67 @@ let totalCart = 0;
 // Variável global para armazenar os produtos no carrinho
 let carrinhoProdutos = [];
 
-// FUNÇÃO PARA ADICIONAR PRODUTOS AO CARRINHO
+// Função para adicionar produto ao carrinho
 function adicionarProduto(id) {
-  let inputQuantity = document.getElementById(`input-quantity-${id}`);
+  const inputQuantity = document.getElementById(`input-quantity-${id}`);
   let quantidade = parseInt(inputQuantity.value);
-  quantidade++;
+
+  quantidade++; // Incrementar a quantidade
+
+  // Atualizar o valor do input com a nova quantidade
   inputQuantity.value = quantidade;
 
-  totalCart++; // Atualizando o atributo value
-  updateCartCount(); // Chamando a função que atualiza o span
-
-  const produtoElement = document.getElementById(`produto-${id}`);
-  const descProduto = document.getElementById(`desc-produto-${id}`);
-  const valorProduto = document.getElementById(`valor-produto-${id}`);
-
-  // Crie um ID exclusivo para o produto no carrinho
   const productId = `produto-${id}`;
+  const produtoElement = document.getElementById(productId);
+  const descProduto = document.getElementById(`desc-produto-${id}`);
+  const valorProdutoElement = document.getElementById(`valor-produto-${id}`);
 
-  addItemToCart(produtoElement.textContent, descProduto.textContent, valorProduto.textContent, productId);
+  if (produtoElement && valorProdutoElement) {
+    const nomeProduto = produtoElement.textContent;
+    const valorProdutoTexto = valorProdutoElement.textContent;
+    const valorProduto = parseFloat(valorProdutoTexto.replace("R$ ", "").replace(",", "."));
+
+    const valorTotal = valorProduto * quantidade;
+
+    // Verifique se o produto já está no carrinho
+    if (carrinhoProdutos[productId]) {
+      // Atualize a quantidade
+      carrinhoProdutos[productId].quantidade = quantidade;
+
+      // Atualize o valor total
+      carrinhoProdutos[productId].valorTotal = carrinhoProdutos[productId].valor * quantidade;
+
+      // Agora, você pode atualizar os elementos no carrinho para refletir as mudanças
+      const listItem = document.querySelector(`.cart-item[data-product-id="${productId}"]`);
+
+      if (listItem) {
+        const quantidadeElement = listItem.querySelector(".quantidade");
+        const valorTotalElement = listItem.querySelector(".valor-total");
+
+        quantidadeElement.textContent = `x ${quantidade}`;
+        valorTotalElement.textContent = `R$ ${carrinhoProdutos[productId].valorTotal.toFixed(2)}`;
+      }
+    } else {
+        // Se não estiver no carrinho, adicione como um novo item
+        addItemToCart(nomeProduto, descProduto.textContent, valorProduto, quantidade, valorTotal, productId);
+        carrinhoProdutos[productId] = {
+          nome: nomeProduto,
+          descricao: descProduto.textContent,
+          valor: valorProduto,
+          quantidade: quantidade,
+          valorTotal: valorTotal,
+      };
+    }
+
+    totalCart++;
+    updateCartCount();
+  }
 }
 
-// Adicione ouvintes de evento a cada botão de adicionar
+// Simplificando a adição de ouvintes de evento para botões de adicionar
 for (let i = 1; i <= 5; i++) {
-  document.getElementById(`btn-plus-${i}`).addEventListener("click", () => {
+  const btnPlus = document.getElementById(`btn-plus-${i}`);
+  btnPlus.addEventListener("click", () => {
     adicionarProduto(i);
   });
 }
@@ -109,38 +147,61 @@ function removeItemFromCart(productId) {
 }
 
 // Função para adicionar um item à lista do carrinho
-function addItemToCart(nome, descricao, valor, productId) {
+function addItemToCart(nome, descricao, valorUnitario, quantidade, valorTotal, productId) {
   const cartList = document.getElementById("cart-list");
 
-  const listItem = document.createElement("li");
-  listItem.className = "list-group-item d-flex justify-content-between lh-sm cart-item";
-  listItem.setAttribute("data-product-id", productId);
+  const listItem = document.querySelector(`.cart-item[data-product-id="${productId}"]`);
 
-  const itemDiv = document.createElement("div");
-  const nomeElement = document.createElement("h6");
-  nomeElement.className = "my-0";
-  nomeElement.textContent = nome;
+  if (listItem) {
+    // Se o item já estiver no carrinho, atualize a quantidade, o valor total e a descrição
+    const quantidadeElement = listItem.querySelector(".quantidade");
+    const valorTotalElement = listItem.querySelector(".valor-total");
+    const descricaoElement = listItem.querySelector(".descricao");
 
-  const descricaoElement = document.createElement("small");
-  descricaoElement.className = "text-muted";
-  descricaoElement.textContent = descricao;
-  itemDiv.appendChild(nomeElement);
-  itemDiv.appendChild(descricaoElement);
+    carrinhoProdutos[productId].quantidade = quantidade;
+    carrinhoProdutos[productId].valorTotal = valorTotal;
+    carrinhoProdutos[productId].descricao = descricao;
 
-  const valorElement = document.createElement("span");
-  valorElement.className = "text-muted";
-  valorElement.textContent = valor;
-  valorElement.id = `valor-${productId}`;
+    quantidadeElement.textContent = `x ${quantidade}`;
+    valorTotalElement.textContent = `R$ ${valorTotal.toFixed(2)}`;
+    descricaoElement.textContent = descricao;
+  } else {
+    // Se o item não estiver no carrinho, crie um novo elemento
+    const listItem = document.createElement("li");
+    listItem.className = "list-group-item d-flex justify-content-between lh-sm cart-item";
+    listItem.setAttribute("data-product-id", productId);
 
-  listItem.appendChild(itemDiv);
-  listItem.appendChild(valorElement);
-  cartList.appendChild(listItem);
+    const itemDiv = document.createElement("div");
+    const nomeElement = document.createElement("h6");
+    nomeElement.className = "my-0";
+    nomeElement.textContent = nome;
 
+    const descricaoElement = document.createElement("small");
+    descricaoElement.className = "text-muted descricao";
+    descricaoElement.textContent = descricao;
+    itemDiv.appendChild(nomeElement);
+    itemDiv.appendChild(descricaoElement);
+
+    const valorTotalElement = document.createElement("span");
+    valorTotalElement.className = "valor-total";
+    valorTotalElement.textContent = `R$ ${valorTotal.toFixed(2)}`;
+
+    const quantidadeElement = document.createElement("span");
+    quantidadeElement.className = "quantidade";
+    quantidadeElement.textContent = `x ${quantidade}`;
+
+    listItem.appendChild(itemDiv);
+    listItem.appendChild(valorTotalElement);
+    listItem.appendChild(quantidadeElement);
+    cartList.appendChild(listItem);
+  }
   // Adicionar informações do produto ao carrinhoProdutos
   carrinhoProdutos[productId] = {
     nome: nome,
     descricao: descricao,
-    valor: valor
+    valor: valorUnitario,
+    quantidade: quantidade,
+    valorTotal: valorTotal,
   };
 }
 
