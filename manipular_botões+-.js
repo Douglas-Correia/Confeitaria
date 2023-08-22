@@ -238,9 +238,17 @@ function updateCartCount() {
 const whatsappButton = document.getElementById("whatsapp-button");
 
 whatsappButton.addEventListener("click", function () {
-  const firstName = document.getElementById("firstName").textContent;
-  const address = document.getElementById("address").textContent;
-  const deliveryOption = document.querySelector('input[name="delivery"]:checked').value;
+  let firstName = document.querySelector("#firstName").value;
+  let address = document.querySelector("#address").value;
+
+  const deliveryOptionElements = document.querySelectorAll('input[name="delivery"]');
+  let deliveryOption;
+  deliveryOptionElements.forEach(element => {
+    if (element.checked) {
+      deliveryOption = element.value;
+    }
+  });
+
   const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
 
   // Obtenha os produtos selecionados com base em carrinhoProdutos
@@ -259,12 +267,12 @@ whatsappButton.addEventListener("click", function () {
     deliveryMessage = "Retirada no local";
   } else {
     // Se não for retirada no local, incluir o endereço de entrega
-    deliveryMessage = `Endereço de entrega: ${address}`;
+    deliveryMessage = `Entregar no endereço: ${address}`;
   }
 
   const whatsappMessage = `Olá, meu nome é ${firstName}.\n` +
     `Eu gostaria de fazer um pedido com os seguintes produtos:\n${selectedProductsString}\n` +
-    `Opção de entrega: ${deliveryMessage}\n` +
+    `Opção de entrega: ${deliveryMessage},\n` +
     `Método de pagamento: ${paymentMethod}\n` +
     `Valor Total: R$ ${totalValue.toFixed(2)}`;
 
