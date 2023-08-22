@@ -90,36 +90,34 @@
                               Please enter your shipping address.
                           </div>
                       </div>
-
+                      
                       <div class="form-check">
-                          <input type="checkbox" class="form-check-input" id="same-address" name="delivery">
-                          <label class="form-check-label" for="same-address">O endereço de entrega é o mesmo endereço de cobrança</label>
+                        <input type="radio" class="form-check-input" id="same-address" name="delivery" value="same-address">
+                        <label class="form-check-label" for="same-address">O endereço de entrega é o mesmo endereço de cobrança</label>
                       </div>
-
+                      
                       <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="same-pickup" name="pickup">
-                        <label class="form-check-label" for="same-address">Retirada no local</label>
-                    </div>
-
-                      <hr class="my-4">
+                        <input type="radio" class="form-check-input" id="pickup" name="delivery" value="pickup">
+                        <label class="form-check-label" for="pickup">Retirada no local</label>
+                      </div>
 
                       <h4 class="mb-3">Pagamento</h4>
 
                       <div class="my-3">
-                          <div class="form-check">
-                              <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked required>
-                              <label class="form-check-label" for="credit">Credito cartão</label>
-                          </div>
-                          <div class="form-check">
-                              <input id="debit" name="paymentMethod" type="radio" class="form-check-input" required>
-                              <label class="form-check-label" for="debit">Debito cartão</label>
-                          </div>
-                          <div class="form-check">
-                              <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" required>
-                              <label class="form-check-label" for="paypal">Dinheiro</label>
-                          </div>
+                        <div class="form-check">
+                          <input id="credit" name="paymentMethod" type="radio" class="form-check-input" checked value="credit-card" required>
+                          <label class="form-check-label" for="credit">Credito cartão</label>
+                        </div>
+                        <div class="form-check">
+                          <input id="debit" name="paymentMethod" type="radio" class="form-check-input" value="debit-card" required>
+                          <label class="form-check-label" for="debit">Debito cartão</label>
+                        </div>
+                        <div class="form-check">
+                          <input id="paypal" name="paymentMethod" type="radio" class="form-check-input" value="cash" required>
+                          <label class="form-check-label" for="paypal">Dinheiro</label>
+                        </div>
                       </div>
-
+                      
                       <!-- Botão para enviar via WhatsApp -->
                       <button type="button" id="whatsapp-button" class="btn btn-primary">Enviar via WhatsApp</button>
                   </div>
@@ -254,9 +252,6 @@
       </li>
   </ul>
 
-  <div class="d-flex justify-content-center align-items-center">
-      <a href="carrinho.html" class="btn btn-lg btn-outline-secondary btn-primary" id="">Finalizar compra</a>
-  </div>
 </div>
 </section>
   
