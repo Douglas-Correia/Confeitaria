@@ -122,6 +122,7 @@ cartContainer.addEventListener("click", (event) => {
 function removerProduto(id) {
   let inputQuantity = document.getElementById(`input-quantity-${id}`);
   let quantidade = parseInt(inputQuantity.value);
+  
   if (quantidade > 0) {
     quantidade--;
     inputQuantity.value = quantidade;
@@ -129,9 +130,29 @@ function removerProduto(id) {
     totalCart--; // Atualizando o atributo value
     updateCartCount(); // Chamando a função que atualiza o span
 
-    // Remova o item do carrinho se a quantidade for zero
-    if (quantidade === 0) {
-      removeItemFromCart(`produto-${id}`);
+    const productId = `produto-${id}`;
+    if (carrinhoProdutos[productId]) {
+      // Reduza a quantidade no carrinho
+      carrinhoProdutos[productId].quantidade--;
+
+      // Atualize o valor total do produto no carrinho
+      carrinhoProdutos[productId].valorTotal = carrinhoProdutos[productId].valor * carrinhoProdutos[productId].quantidade;
+
+      // Atualize os elementos no carrinho para refletir as mudanças
+      const listItem = document.querySelector(`.cart-item[data-product-id="${productId}"]`);
+
+      if (listItem) {
+        const quantidadeElement = listItem.querySelector(".quantidade");
+        const valorTotalElement = listItem.querySelector(".valor-total");
+
+        quantidadeElement.textContent = `x ${carrinhoProdutos[productId].quantidade}`;
+        valorTotalElement.textContent = `R$ ${carrinhoProdutos[productId].valorTotal.toFixed(2)}`;
+
+        // Se a quantidade chegar a 0, remova o item do carrinho
+        if (carrinhoProdutos[productId].quantidade === 0) {
+          removeItemFromCart(productId);
+        }
+      }
     }
   }
 }
@@ -143,6 +164,9 @@ function removeItemFromCart(productId) {
   if (cartItem) {
     cartItem.remove();
     updateCartCount(); // Atualiza o totalCart
+
+    // Remova o produto do carrinhoProdutos
+    delete carrinhoProdutos[productId];
   }
 }
 
@@ -211,22 +235,38 @@ function updateCartCount() {
   document.getElementById("quantity-carrinho").textContent = totalCart;
 }
 
-// FUNÇÃO PARA MANIPULAÇÃO DOS PRODUTOS SELECIONADOS E CHAMADA DO WHATSAPP
 const whatsappButton = document.getElementById("whatsapp-button");
 
 whatsappButton.addEventListener("click", function () {
-  const firstName = document.getElementById("firstName").value;
-  const address = document.getElementById("address").value;
+  const firstName = document.getElementById("firstName").textContent;
+  const address = document.getElementById("address").textContent;
+  const deliveryOption = document.querySelector('input[name="delivery"]:checked').value;
+  const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
 
   // Obtenha os produtos selecionados com base em carrinhoProdutos
   const selectedProducts = Object.keys(carrinhoProdutos).map(productId => {
     const item = carrinhoProdutos[productId];
-    return `${item.nome} (${item.descricao}) por ${item.valor}`;
+    return `${item.quantidade} x ${item.nome} (${item.descricao}) por R$ ${item.valorTotal.toFixed(2)}`;
   });
 
   const selectedProductsString = selectedProducts.join(", ");
 
-  const whatsappMessage = `Olá, meu nome é ${firstName}, Eu gostaria de pedir ${selectedProductsString}, meu endereço é ${address}.`;
+  // Calcular o valor total do carrinho
+  const totalValue = Object.values(carrinhoProdutos).reduce((total, item) => total + item.valorTotal, 0);
+
+  let deliveryMessage;
+  if (deliveryOption === "pickup") {
+    deliveryMessage = "Retirada no local";
+  } else {
+    // Se não for retirada no local, incluir o endereço de entrega
+    deliveryMessage = `Endereço de entrega: ${address}`;
+  }
+
+  const whatsappMessage = `Olá, meu nome é ${firstName}.\n` +
+    `Eu gostaria de fazer um pedido com os seguintes produtos:\n${selectedProductsString}\n` +
+    `Opção de entrega: ${deliveryMessage}\n` +
+    `Método de pagamento: ${paymentMethod}\n` +
+    `Valor Total: R$ ${totalValue.toFixed(2)}`;
 
   const whatsappLink = `https://api.whatsapp.com/send?phone=67999397401&text=${encodeURIComponent(whatsappMessage)}`;
 
